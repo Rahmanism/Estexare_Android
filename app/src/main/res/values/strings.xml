@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Estexare</string>
+    <string name="app_name_fa">استخاره</string>
+    <string name="app_name_full">Estexare - استخاره</string>
+    <string name="title_home">Estexare - استخاره</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="placeholder_good_en">Good</string>
+    <string name="placeholder_good_fa">خوب</string>
+    <string name="placeholder_good_fi">Khoob</string>
+    <string name="placeholder_aye_en">Ayah</string>
+    <string name="placeholder_aye_fa">آیه</string>
+    <string name="placeholder_aye_fi">Aye</string>
+    <string name="placeholder_aye_no_en">Ayah No.</string>
+    <string name="placeholder_aye_no_fa">شماره آیه</string>
+    <string name="placeholder_aye_no_fi">Shomare Aye</string>
+    <string name="placeholder_sure_en">Surah</string>
+    <string name="placeholder_sure_fa">سوره</string>
+    <string name="placeholder_sure_fi">Sure</string>
+    <string name="placeholder_sure_no_en">Surah No.</string>
+    <string name="placeholder_sure_no_fa">شماره سوره</string>
+    <string name="placeholder_sure_no_fi">Shomare Sure</string>
+    <string name="placeholder_comment_en">Comment</string>
+    <string name="placeholder_comment_fa">توضیح</string>
+    <string name="placeholder_comment_fi">Tozih</string>
+    <string name="estexare">استخاره</string>
+    <string name="estexare_en">Estexare - English</string>
+    <string name="estexare_fa">استخاره</string>
+    <string name="estexare_fi">Estexare - Finglish</string>
+    <string name="lang_en">English</string>
+    <string name="lang_fa">فارسی</string>
+</resources>
