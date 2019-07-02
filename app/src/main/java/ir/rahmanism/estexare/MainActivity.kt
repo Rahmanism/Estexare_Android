@@ -1,10 +1,15 @@
 package ir.rahmanism.estexare
 
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
+import android.widget.Toast
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,33 +23,40 @@ class MainActivity : AppCompatActivity() {
     private lateinit var commentTxt: TextView
     private lateinit var newBtn: Button
     private var notLoadedYet: Boolean = true
+    private lateinit var navView: BottomNavigationView
+    private lateinit var smallInfoContainer: LinearLayout
+    private lateinit var estexare: OneEstexare
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_fa -> {
+                Log.d("item.itemid", item.itemId.toString())
                 textMessage.setText(R.string.title_home)
                 if (notLoadedYet) {
-                    sureLabelTxt.setText(R.string.sure_fa)
                     sureTxt.setText(R.string.placeholder_sure_fa)
-                    ayeLabelTxt.setText(R.string.aye_fa)
                     ayeNoTxt.setText(R.string.placeholder_aye_no_fa)
                     ayeTxt.setText(R.string.placeholder_aye_fa)
                     commentTxt.setText(R.string.placeholder_comment_fa)
-                    newBtn.setText(R.string.new_estexare_fa)
-                }
+                } else filEstexareView()
+                sureLabelTxt.setText(R.string.sure_fa)
+                ayeLabelTxt.setText(R.string.aye_fa)
+                newBtn.setText(R.string.new_estexare_fa)
+                smallInfoContainer.layoutDirection = View.LAYOUT_DIRECTION_RTL
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_en -> {
+                Log.d("item.itemid", item.itemId.toString())
                 textMessage.setText(R.string.title_home)
                 if (notLoadedYet) {
-                    sureLabelTxt.setText(R.string.sure_en)
                     sureTxt.setText(R.string.placeholder_sure_en)
-                    ayeLabelTxt.setText(R.string.aye_en)
                     ayeNoTxt.setText(R.string.placeholder_aye_no_en)
                     ayeTxt.setText(R.string.placeholder_aye_en)
                     commentTxt.setText(R.string.placeholder_comment_en)
-                    newBtn.setText(R.string.new_estexare_en)
-                }
+                } else filEstexareView()
+                sureLabelTxt.setText(R.string.sure_en)
+                ayeLabelTxt.setText(R.string.aye_en)
+                newBtn.setText(R.string.new_estexare_en)
+                smallInfoContainer.layoutDirection = View.LAYOUT_DIRECTION_LTR
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -54,7 +66,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val navView: BottomNavigationView = findViewById(R.id.nav_view)
+        navView = findViewById(R.id.nav_view)
 
         textMessage = findViewById(R.id.title_text)
         resultTxt = findViewById(R.id.result)
@@ -65,7 +77,83 @@ class MainActivity : AppCompatActivity() {
         ayeTxt = findViewById(R.id.aye)
         commentTxt = findViewById(R.id.comment)
         newBtn = findViewById(R.id.new_estexare_btn)
+        smallInfoContainer = findViewById(R.id.small_info_container)
 
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
+        newBtn.setOnClickListener(onNewEstexareClick)
+    }
+
+    private val onNewEstexareClick = View.OnClickListener {
+        estexare = getNewEstexare()
+        if (estexare != null) {
+            notLoadedYet = false
+            filEstexareView()
+        } else {
+            Toast.makeText(
+                this@MainActivity,
+                "Error in getting estexare!", Toast.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun filEstexareView() {
+        sureTxt.setText(estexare.sureNo.toString() + " - " + estexare.sure)
+        ayeNoTxt.setText(estexare.ayeNo.toString())
+        ayeTxt.setText(estexare.aye)
+
+        if (navView.selectedItemId == R.id.navigation_fa) {
+            resultTxt.setText(estexare.resultFa)
+            commentTxt.setText(estexare.commentFa)
+        } else {
+            resultTxt.setText(estexare.resultEn)
+            commentTxt.setText(estexare.commentEn)
+        }
+    }
+
+    private fun getNewEstexare(): OneEstexare {
+        val randomAyeNo = Random.nextInt(1, 182)
+
+        val query =
+            "SELECT sure, aye, sure_no, aye_no, fi_result, fi_comment," +
+                    "fa_result, fa_comment, en_result, en_comment " +
+                    "FROM estexare WHERE rowid = $randomAyeNo"
+
+        val adb = AssetDatabaseOpenHelper(this)
+        val db = adb.openDatabase()
+        val estexareRecord = db.rawQuery(query, null)
+
+        var estexare = OneEstexare()
+        if (estexareRecord.count > 0) {
+            estexareRecord.moveToFirst()
+
+            val sure = estexareRecord.getString(0)
+            val aye = estexareRecord.getString(1)
+            val sureNo = estexareRecord.getInt(2)
+            val ayeNo = estexareRecord.getInt(3)
+            val fiResult = estexareRecord.getString(4)
+            val fiComment = estexareRecord.getString(5)
+            val faResult = estexareRecord.getString(6)
+            val faComment = estexareRecord.getString(7)
+            val enResult = estexareRecord.getString(8)
+            val enComment = estexareRecord.getString(9)
+
+            estexare.sure = sure
+            estexare.aye = aye
+            estexare.sureNo = sureNo
+            estexare.ayeNo = ayeNo
+            estexare.resultFi = fiResult
+            estexare.commentFi = fiComment
+            estexare.resultFa = faResult
+            estexare.commentFa = faComment
+            estexare.resultEn = enResult
+            estexare.commentEn = enComment
+
+            estexareRecord.close()
+        } else {
+            Log.d("Error getting new one", "No record is retrieved!")
+        }
+
+        db.close()
+        return estexare
     }
 }

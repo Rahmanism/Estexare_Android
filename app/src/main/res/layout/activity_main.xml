@@ -38,29 +38,35 @@
                     app:layout_constraintLeft_toLeftOf="parent"
                     app:layout_constraintTop_toTopOf="parent"/>
 
+            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
+                      android:id="@+id/comment"
+                      android:layout_marginBottom="@dimen/normal_margin"
+                      android:textAlignment="center"
+                      android:text="@string/placeholder_comment_fa"/>
+
             <LinearLayout android:orientation="horizontal"
                           android:layout_width="match_parent"
                           android:textAlignment="center"
                           android:gravity="center"
+                          android:id="@+id/small_info_container"
+                          android:layoutDirection="rtl"
                           android:layout_height="match_parent">
 
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                           android:id="@+id/sure_label"
-                          android:layout_margin="@dimen/activity_horizontal_margin"
+                          android:layout_margin="@dimen/very_small_margin"
                           android:text="@string/sure_fa"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:layout_margin="@dimen/activity_horizontal_margin"
                           android:id="@+id/sure"
                           android:text="@string/placeholder_sure_fa"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
                           android:layout_margin="@dimen/activity_horizontal_margin"
                           android:text="@string/spacer"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:layout_margin="@dimen/activity_horizontal_margin"
                           android:id="@+id/aye_label"
+                          android:layout_margin="@dimen/very_small_margin"
                           android:text="@string/aye_fa"/>
                 <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                          android:layout_margin="@dimen/activity_horizontal_margin"
                           android:id="@+id/aye_no"
                           android:text="@string/placeholder_aye_no_fa"/>
             </LinearLayout>
@@ -69,16 +75,13 @@
                       android:id="@+id/aye"
                       android:textAlignment="center"
                       android:text="@string/placeholder_aye_fa"/>
-            <TextView android:layout_width="match_parent" android:layout_height="wrap_content"
-                      android:id="@+id/comment"
-                      android:textAlignment="center"
-                      android:text="@string/placeholder_comment_fa"/>
-
         </LinearLayout>
 
         <Button
                 android:id="@+id/new_estexare_btn"
                 android:text="@string/new_estexare_fa"
+                android:layout_marginTop="@dimen/normal_margin"
+                android:padding="@dimen/normal_margin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
     </LinearLayout>
