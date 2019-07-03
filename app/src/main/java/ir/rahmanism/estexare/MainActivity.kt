@@ -22,22 +22,29 @@ class MainActivity : AppCompatActivity() {
     private lateinit var ayeTxt: TextView
     private lateinit var commentTxt: TextView
     private lateinit var newBtn: Button
+    // At the start of app, we just put placeholder texts
     private var notLoadedYet: Boolean = true
     private lateinit var navView: BottomNavigationView
+    // Name and no of sure and aye
     private lateinit var smallInfoContainer: LinearLayout
+    // The estexare object
     private lateinit var estexare: OneEstexare
+    // To know we are in Farsi tab or English
+    private var navViewCurrent: String = "fa"
 
     private val onNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.navigation_fa -> {
-                Log.d("item.itemid", item.itemId.toString())
+                navViewCurrent = "fa"
                 textMessage.setText(R.string.title_home)
                 if (notLoadedYet) {
                     sureTxt.setText(R.string.placeholder_sure_fa)
                     ayeNoTxt.setText(R.string.placeholder_aye_no_fa)
                     ayeTxt.setText(R.string.placeholder_aye_fa)
                     commentTxt.setText(R.string.placeholder_comment_fa)
-                } else filEstexareView()
+                } else {
+                    filEstexareView()
+                }
                 sureLabelTxt.setText(R.string.sure_fa)
                 ayeLabelTxt.setText(R.string.aye_fa)
                 newBtn.setText(R.string.new_estexare_fa)
@@ -45,14 +52,16 @@ class MainActivity : AppCompatActivity() {
                 return@OnNavigationItemSelectedListener true
             }
             R.id.navigation_en -> {
-                Log.d("item.itemid", item.itemId.toString())
+                navViewCurrent = "en"
                 textMessage.setText(R.string.title_home)
                 if (notLoadedYet) {
                     sureTxt.setText(R.string.placeholder_sure_en)
                     ayeNoTxt.setText(R.string.placeholder_aye_no_en)
                     ayeTxt.setText(R.string.placeholder_aye_en)
                     commentTxt.setText(R.string.placeholder_comment_en)
-                } else filEstexareView()
+                } else {
+                    filEstexareView()
+                }
                 sureLabelTxt.setText(R.string.sure_en)
                 ayeLabelTxt.setText(R.string.aye_en)
                 newBtn.setText(R.string.new_estexare_en)
@@ -66,8 +75,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        navView = findViewById(R.id.nav_view)
 
+        // Get the ui controls from layout.
+        navView = findViewById(R.id.nav_view)
         textMessage = findViewById(R.id.title_text)
         resultTxt = findViewById(R.id.result)
         sureLabelTxt = findViewById(R.id.sure_label)
@@ -79,6 +89,7 @@ class MainActivity : AppCompatActivity() {
         newBtn = findViewById(R.id.new_estexare_btn)
         smallInfoContainer = findViewById(R.id.small_info_container)
 
+        // Set event listeners
         navView.setOnNavigationItemSelectedListener(onNavigationItemSelectedListener)
         newBtn.setOnClickListener(onNewEstexareClick)
     }
@@ -97,20 +108,24 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun filEstexareView() {
+        // These info are the same for all languages!
         sureTxt.setText(estexare.sureNo.toString() + " - " + estexare.sure)
         ayeNoTxt.setText(estexare.ayeNo.toString())
         ayeTxt.setText(estexare.aye)
 
-        if (navView.selectedItemId == R.id.navigation_fa) {
+        // The data for every language separately
+        if (navViewCurrent == "fa") {
             resultTxt.setText(estexare.resultFa)
             commentTxt.setText(estexare.commentFa)
-        } else {
+        } else if (navViewCurrent == "en") {
             resultTxt.setText(estexare.resultEn)
             commentTxt.setText(estexare.commentEn)
         }
     }
 
     private fun getNewEstexare(): OneEstexare {
+        //// THE MAGIC happens here
+
         val randomAyeNo = Random.nextInt(1, 182)
 
         val query =
