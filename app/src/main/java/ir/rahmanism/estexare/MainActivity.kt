@@ -1,19 +1,24 @@
 package ir.rahmanism.estexare
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.LinearLayout
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlin.random.Random
+
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var textMessage: TextView
+    private lateinit var titleText: TextView
     private lateinit var resultTxt: TextView
     private lateinit var sureLabelTxt: TextView
     private lateinit var sureTxt: TextView
@@ -36,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.navigation_fa -> {
                 navViewCurrent = "fa"
-                textMessage.setText(R.string.title_home)
+                titleText.setText(R.string.app_name_fa)
                 if (notLoadedYet) {
                     sureTxt.setText(R.string.placeholder_sure_fa)
                     ayeNoTxt.setText(R.string.placeholder_aye_no_fa)
@@ -45,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                 } else {
                     filEstexareView()
                 }
+
                 sureLabelTxt.setText(R.string.sure_fa)
                 ayeLabelTxt.setText(R.string.aye_fa)
                 newBtn.setText(R.string.new_estexare_fa)
@@ -53,7 +59,7 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.navigation_en -> {
                 navViewCurrent = "en"
-                textMessage.setText(R.string.title_home)
+                titleText.setText(R.string.app_name_en)
                 if (notLoadedYet) {
                     sureTxt.setText(R.string.placeholder_sure_en)
                     ayeNoTxt.setText(R.string.placeholder_aye_no_en)
@@ -78,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
         // Get the ui controls from layout.
         navView = findViewById(R.id.nav_view)
-        textMessage = findViewById(R.id.title_text)
+        titleText = findViewById(R.id.title_text)
         resultTxt = findViewById(R.id.result)
         sureLabelTxt = findViewById(R.id.sure_label)
         sureTxt = findViewById(R.id.sure)
@@ -95,8 +101,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private val onNewEstexareClick = View.OnClickListener {
-        estexare = getNewEstexare()
-        if (estexare != null) {
+        var tmpEstexare = getNewEstexare()
+        if (tmpEstexare != null) {
+            estexare = tmpEstexare
             notLoadedYet = false
             filEstexareView()
         } else {
@@ -107,8 +114,8 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun filEstexareView() {
         // These info are the same for all languages!
+    private fun filEstexareView() {
         sureTxt.setText(estexare.sureNo.toString() + " - " + estexare.sure)
         ayeNoTxt.setText(estexare.ayeNo.toString())
         ayeTxt.setText(estexare.aye)
@@ -123,7 +130,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getNewEstexare(): OneEstexare {
+    private fun getNewEstexare(): OneEstexare? {
         //// THE MAGIC happens here
 
         val randomAyeNo = Random.nextInt(1, 182)
@@ -138,7 +145,8 @@ class MainActivity : AppCompatActivity() {
         val estexareRecord = db.rawQuery(query, null)
 
         var estexare = OneEstexare()
-        if (estexareRecord.count > 0) {
+        var hasRecord = estexareRecord.count > 0
+        if (hasRecord) {
             estexareRecord.moveToFirst()
 
             val sure = estexareRecord.getString(0)
@@ -166,9 +174,26 @@ class MainActivity : AppCompatActivity() {
             estexareRecord.close()
         } else {
             Log.d("Error getting new one", "No record is retrieved!")
+
         }
 
         db.close()
-        return estexare
+        return if (hasRecord) estexare else null
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        var inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.main_app_menu, menu)
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.about_menu_item) {
+            val intent = Intent(this@MainActivity, AboutActivity::class.java)
+            startActivity(intent)
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto" android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              style="@style/VeryBigMessage"
+              android:text="@string/app_name_fa"/>
+
+    <TextView android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              style="@style/TitleStyle"
+              android:text="@string/app_name"/>
+
+    <View android:layout_width="match_parent"
+          android:layout_margin="@dimen/large_margin"
+          android:layout_height="@dimen/very_small_margin"
+          android:background="@android:color/darker_gray"/>
+
+    <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center">
+            <TextView android:text="@string/developer" android:gravity="end"/>
+            <TextView android:text="@string/separator_text" android:gravity="center"
+                      android:layout_margin="@dimen/very_small_margin"/>
+            <TextView android:text="@string/my_name_en" android:gravity="start"/>
+        </TableRow>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent" android:id="@id/spacer"
+                  android:layout_margin="@dimen/very_small_margin"/>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center">
+            <TextView android:text="@string/github" android:gravity="end"/>
+            <TextView android:text="@string/separator_text" android:gravity="center"
+                      android:layout_margin="@dimen/very_small_margin"/>
+            <TextView android:text="@string/github_url" android:gravity="start" android:id="@+id/github_link"
+                      android:autoLink="web"/>
+        </TableRow>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent"
+                  android:layout_margin="@dimen/very_small_margin" android:id="@id/spacer"/>
+        <TableRow android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center">
+            <TextView android:text="@string/version" android:gravity="end"/>
+            <TextView android:text="@string/separator_text" android:gravity="center"
+                      android:layout_margin="@dimen/very_small_margin"/>
+            <TextView android:id="@+id/version_info" android:gravity="start"/>
+        </TableRow>
+    </TableLayout>
+
+    <ImageButton
+            android:id="@+id/close_about"
+            android:layout_marginTop="@dimen/large_margin"
+            android:layout_gravity="center"
+            android:padding="@dimen/normal_margin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" app:srcCompat="?attr/actionModeCloseDrawable"/>
+
+</LinearLayout>
